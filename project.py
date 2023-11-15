@@ -222,7 +222,7 @@ with st.container():
                 model_output = st.session_state.model_new.predict(input_tensor)
 
             # Print the predicted label
-            predicted_label = np.argmax(model_output[0])
+            predicted_label = model_output[0]
             
             st.success(f"The model predicts the digit: {predicted_label}")
             st.bar_chart(model_output)
