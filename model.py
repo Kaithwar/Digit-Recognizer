@@ -86,42 +86,4 @@ def digitrecognizer(model_choice,epochs,learning_rate,X,y,X_train, X_test, y_tra
         X_train = XCnn_train;
         X_test = XCnn_test;
 
-
-    # Training loop
-    history = model.fit(X_train, y_train)
-    # Display the table in the frontend
-    df = pd.DataFrame(history.history)
-    selected_columns = ["epoch", "valid_acc", "train_loss", "valid_loss", "dur"]
-    result_df = df[selected_columns]
-    st.table(result_df)
-
-    st.success(f"Training completed. Final Accuracy: {result_df['valid_acc'].iloc[-1]:.2%}")
-    st.success(f"Training completed. Training Loss: {result_df['train_loss'].iloc[-1]:.2%}")
-
-    # Prediction
-    y_pred = model.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
-
-    st.success(f"Training completed. Accuracy: {accuracy:.2%}")
-    # Plot Training Accuracy and Training Loss
-    plt.figure(figsize=(12, 6))
-
-    # Plot Training Accuracy
-    plt.subplot(1, 2, 1)
-    plt.plot(result_df['epoch'], result_df['valid_acc'], label='Validation Accuracy')
-    plt.xlabel('Epochs')
-    plt.ylabel('Accuracy')
-    plt.title('Validation Accuracy Over Epochs')
-    plt.legend()
-
-    # Plot Training Loss
-    plt.subplot(1, 2, 2)
-    plt.plot(result_df['epoch'], result_df['train_loss'], label='Training Loss')
-    plt.xlabel('Epochs')
-    plt.ylabel('Loss')
-    plt.title('Training Loss Over Epochs')
-    plt.legend()
-
-    # Display the plots
-    st.pyplot(plt)
     return model
