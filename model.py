@@ -13,6 +13,39 @@ from sklearn.metrics import accuracy_score
 import numpy as np
 import pandas as pd
 
+def simple(epochs,learning_rate,X,y,X_train, X_test, y_train, y_test):
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    mnist_dim = X_train.shape[1]
+    hidden_dim = int(mnist_dim/8)
+    output_dim = len(np.unique(y_train))
+    class ClassifierModule(nn.Module):
+        def __init__(
+                self,
+                input_dim=mnist_dim,
+                hidden_dim=hidden_dim,
+                output_dim=output_dim,
+                dropout=0.5,
+        ):
+            super(ClassifierModule, self).__init__()
+            self.dropout = nn.Dropout(dropout)
+            self.hidden = nn.Linear(input_dim, hidden_dim)
+            self.output = nn.Linear(hidden_dim, output_dim)
+
+        def forward(self, X, **kwargs):
+            X = F.relu(self.hidden(X))
+            X = self.dropout(X)
+            X = F.softmax(self.output(X), dim=-1)
+            return X
+
+    torch.manual_seed(0)
+    model = NeuralNetClassifier(
+        ClassifierModule,
+        max_epochs=epochs,
+        lr=learning_rate,
+        device=device,
+    )
+    return model
+
 def digitrecognizer(model_choice,epochs,learning_rate,X,y,X_train, X_test, y_train, y_test):
     
     # Build Neural Network with PyTorch
